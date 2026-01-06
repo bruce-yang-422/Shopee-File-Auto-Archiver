@@ -1,26 +1,66 @@
-# 📂 Shopee File Auto-Archiver 使用與命名規範
+# 📂 Shopee File Auto-Archiver (蝦皮檔案自動歸檔系統)
 
-## 1\. 系統概要
+![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![Python](https://img.shields.io/badge/Python-3.8+-green.svg)
+![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-本規範用於說明 **Shopee File Auto-Archiver** (`shopee_file_auto_archiver.exe`) 的使用方式與檔案命名規範，用來將位於 `00_Unclassified` 的蝦皮報表自動分流至指定資料夾。
+蝦皮電商報表自動化歸檔系統：支援訂單與廣告報表之智能分類、正規化命名與異常辨識，大幅提升數據整理效率。
 
-### 基本資訊
+---
 
-  * **Log 紀錄**：執行結果會記錄於 `01_Shopee/latest_sort_log.txt`（每次執行會覆蓋舊內容）。
-  * **重複處理**：若目標資料夾已存在同名檔案，將**跳過 (Skip)** 不執行，避免覆蓋。
-  * **佔用處理**：若檔案被 Excel 開啟 (PermissionError)，將記錄 `[LOCKED]` 並跳過。
-  * **執行方式**：
-      * **重要**：請先將 `shopee_file_auto_archiver.exe` 下載到您的本地 PC
-      * 方法 1：直接雙擊執行 `shopee_file_auto_archiver.exe`
-      * 方法 2：在命令列視窗中執行 `shopee_file_auto_archiver.exe`
-      * **路徑要求**：exe 檔案需放在以下任一位置：
-        - `01_Shopee` 資料夾內
-        - `01_Shopee` 的上一層目錄（與 `01_Shopee` 同層）
-        - 或確保網路路徑 `\\Ycpl-server\a02_電商部\03_平台管理\Online_Platform_Data\01_Shopee` 可正常存取
+## ✨ 核心特色
 
------
+* **智能分流**：自動識別 `00_Unclassified` 資料夾中的檔案，並按「店家/年/月」路徑精確歸檔。
+* **多格式支援**：支援 `.xlsx` (訂單報表) 與 `.csv` (廣告報表) 兩種主流格式。
+* **正則解析日期**：採用 Regex 技術自動抓取檔名中的 8 碼日期（支援多日期格式，自動抓取最新日期）。
+* **健全檢查機制**：具備「檔案佔用 (Locked)」偵測與「重複檔案 (Skip)」跳過機制，保護數據完整性。
+* **詳細執行日誌**：每次執行均會生成 `latest_sort_log.txt`，清楚記錄移動成功、失敗或無法辨識的原因。
 
-## 2\. 訂單報表 (Order Data)
+---
+
+## 🚀 快速開始
+
+### 1. 下載程式
+請前往 [Releases](https://github.com/bruce-yang-422/Shopee-File-Auto-Archiver/releases) 頁面下載最新版本的 `shopee_file_auto_archiver.exe`。
+
+### 2. 環境配置
+確保執行檔放在以下任一位置：
+* `01_Shopee` 資料夾內
+* 與 `01_Shopee` 平行的上一層目錄
+* 或確保網路路徑 `\\Ycpl-server\a02_電商部\03_平台管理\Online_Platform_Data\01_Shopee` 可正常存取
+
+### 3. 執行歸檔
+雙擊執行 `shopee_file_auto_archiver.exe`，系統將自動開始掃描 `00_Unclassified` 資料夾並進行分流。
+
+---
+
+## 📂 資料夾架構說明
+
+歸檔後的檔案將依以下規則存放：
+
+* **訂單報表**：`01_Order_Data / [店家目錄] / [年] / [月]`
+* **廣告報表**：`02_Ads_Data / [店家目錄] / [年] / [月]`
+* **無法辨識**：`99_無法辨識`（當檔名格式不符或找不到店家對應時）
+
+完整目錄結構：
+```
+BASE_DIR (\\Ycpl-server\a02_電商部\03_平台管理\Online_Platform_Data\01_Shopee)
+├── 00_Unclassified/          # 待分類檔案來源資料夾
+├── 01_Order_Data/            # 訂單資料分類目標
+│   └── {店家資料夾}/
+│       └── {年份}/
+│           └── {月份}/
+├── 02_Ads_Data/              # 廣告資料分類目標
+│   └── {店家資料夾}/
+│       └── {年份}/
+│           └── {月份}/
+├── 99_無法辨識/              # 無法分類的檔案
+└── latest_sort_log.txt       # 分類日誌檔案
+```
+
+---
+
+## 📋 訂單報表 (Order Data)
 
 此類檔案將被移動至：`01_Order_Data / [店家目錄] / [年] / [月]`
 
@@ -32,7 +72,9 @@
 ### 📏 命名格式規範
 
 建議格式：
-`[店名]_[ShopID]_[報表類型]_[YYYYMMDD]_[其他資訊].xlsx`
+```
+[店名]_[ShopID]_[報表類型]_[YYYYMMDD]_[其他資訊].xlsx
+```
 
 **解析邏輯：**
 
@@ -55,9 +97,9 @@
   * `ShopA_訂單.xlsx` (錯誤：缺少 `_sh` 關鍵字或 ID 無法對應)
   * `ShopA_SH001_2025-12-05.xlsx` (錯誤：日期格式非 8 碼純數字，雖 Regex 可能抓到但建議統一)
 
------
+---
 
-## 3\. 廣告報表 (Ads Data)
+## 📋 廣告報表 (Ads Data)
 
 此類檔案將被移動至：`02_Ads_Data / [店家目錄] / [年] / [月]`
 
@@ -70,7 +112,9 @@
 ### 📏 命名格式規範
 
 標準格式 (蝦皮預設)：
-`[店名]-蝦皮廣告-[類型]-[YYYY_MM_DD].csv`
+```
+[店名]-蝦皮廣告-[類型]-[YYYY_MM_DD].csv
+```
 
 **解析邏輯：**
 
@@ -97,9 +141,9 @@
   * `蝦皮廣告-2025_12_05.csv` (錯誤：開頭無店名)
   * `萌寵要當家-蝦皮廣告-20251205.csv` (錯誤：日期格式非底線分隔 `YYYY_MM_DD`)
 
------
+---
 
-## 4\. 錯誤處理與疑難排解
+## 🛠️ 錯誤處理與疑難排解
 
 ### 伺服器連線錯誤
 
@@ -159,10 +203,7 @@
   3. 權限不足無法存取該資料夾
 - **解決方法**：確認資料夾是否存在，或聯絡系統管理員
 
------
-
-## 5\. 檔案分類異常處理 (Unknown)
-
+### 檔案分類異常處理
 
 無法成功分類的檔案將被移動至：`99_無法辨識`
 
@@ -184,9 +225,15 @@
 | `[OK] 移動成功` | 檔案成功移動至目標資料夾 | 無需處理 |
 | `[ERROR] 移動失敗` | 檔案移動時發生其他錯誤 | 檢查檔案權限或路徑是否正確 |
 
------
+### 常見問題 FAQ
 
-## 6\. Shop Mapping 維護
+* **[LOCKED] 檔案被佔用**：請確認該 Excel 檔案是否已關閉，關閉後重新執行即可。
+* **[UNKNOWN] 日期解析失敗**：請檢查訂單檔名是否包含 `YYYYMMDD` (8碼) 或廣告檔名是否包含 `YYYY_MM_DD`。
+* **伺服器連線失敗**：請確認網路連線正常，並確認防毒軟體未阻擋 `\\Ycpl-server` 的存取權限。
+
+---
+
+## 🔧 Shop Mapping 維護
 
 若有新店家加入，需修改原始 Python 腳本 (`shopee_file_auto_archiver.py`) 中的 `SHOP_MAPPING` 字典，然後重新打包成 exe：
 
@@ -209,7 +256,7 @@ SHOP_MAPPING = {
 
 ---
 
-## 7\. 使用範例
+## 📝 使用範例
 
 ### 訂單檔案範例
 ```
@@ -236,3 +283,11 @@ SHOP_MAPPING = {
 未知格式檔案.xlsx
 → 移動至：99_無法辨識/
 ```
+
+---
+
+## ⚖️ 授權條款
+本專案採用 MIT 授權條款。詳細資訊請參閱 [LICENSE](LICENSE) 檔案。
+
+---
+*Developed by Bruce Yang | 2026-01-06*
