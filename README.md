@@ -1,8 +1,8 @@
-# 📂 Shopee 檔案自動歸檔命名規範
+# 📂 Shopee File Auto-Archiver 使用與命名規範
 
 ## 1\. 系統概要
 
-本規範用於自動化程式 (`classify_shopee_files.exe`)，將位於 `00_Unclassified` 的蝦皮報表自動分流至指定資料夾。
+本規範用於說明 **Shopee File Auto-Archiver** (`shopee_file_auto_archiver.exe`) 的使用方式與檔案命名規範，用來將位於 `00_Unclassified` 的蝦皮報表自動分流至指定資料夾。
 
 ### 基本資訊
 
@@ -10,9 +10,9 @@
   * **重複處理**：若目標資料夾已存在同名檔案，將**跳過 (Skip)** 不執行，避免覆蓋。
   * **佔用處理**：若檔案被 Excel 開啟 (PermissionError)，將記錄 `[LOCKED]` 並跳過。
   * **執行方式**：
-      * **重要**：請先將 `classify_shopee_files.exe` 下載到您的本地 PC
-      * 方法 1：直接雙擊執行 `classify_shopee_files.exe`
-      * 方法 2：在命令列視窗中執行 `classify_shopee_files.exe`
+      * **重要**：請先將 `shopee_file_auto_archiver.exe` 下載到您的本地 PC
+      * 方法 1：直接雙擊執行 `shopee_file_auto_archiver.exe`
+      * 方法 2：在命令列視窗中執行 `shopee_file_auto_archiver.exe`
       * **路徑要求**：exe 檔案需放在以下任一位置：
         - `01_Shopee` 資料夾內
         - `01_Shopee` 的上一層目錄（與 `01_Shopee` 同層）
@@ -188,7 +188,7 @@
 
 ## 6\. Shop Mapping 維護
 
-若有新店家加入，需修改原始 Python 腳本 (`classify_shopee_files.py`) 中的 `SHOP_MAPPING` 字典，然後重新打包成 exe：
+若有新店家加入，需修改原始 Python 腳本 (`shopee_file_auto_archiver.py`) 中的 `SHOP_MAPPING` 字典，然後重新打包成 exe：
 
 ```python
 SHOP_MAPPING = {

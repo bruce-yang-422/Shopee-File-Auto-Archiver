@@ -1,6 +1,6 @@
 """
-Shopee 檔案自動分類腳本
-========================
+Shopee File Auto-Archiver
+=========================
 
 功能說明：
     此腳本用於自動分類 Shopee 平台的訂單資料與廣告資料檔案。
@@ -80,11 +80,11 @@ Shopee 檔案自動分類腳本
 
 使用方法：
     Python 腳本模式：
-        python classify_shopee_files.py
+        python shopee_file_auto_archiver.py
     
     Exe 執行檔模式（推薦）：
-        1. 直接雙擊執行 classify_shopee_files.exe
-        2. 或在命令列視窗中執行 classify_shopee_files.exe
+        1. 直接雙擊執行 shopee_file_auto_archiver.exe
+        2. 或在命令列視窗中執行 shopee_file_auto_archiver.exe
         3. 程式會自動檢查伺服器連線並顯示執行結果
 
 注意事項：
@@ -464,7 +464,7 @@ def main():
     
     # 顯示程式啟動訊息
     print("\n" + "="*60)
-    print("Shopee 檔案自動分類程式")
+    print("Shopee File Auto-Archiver")
     print("="*60)
     print("正在檢查伺服器連線...\n")
     
