@@ -37,6 +37,15 @@ env/
 *.exe
 *.ico
 
+# 資料檔案（所有資料夾，含大小寫副檔名）
+*.[xX][lL][sS]
+*.[xX][lL][sS][xX]
+*.[pP][nN][gG]
+*.[cC][sS][vV]
+*.[jJ][pP][gG]
+*.[dD][oO][cC]
+*.[dD][oO][cC][xX]
+
 # 數據文件夾（不追蹤實際數據）
 01_Shopee/00_Unclassified/
 01_Shopee/01_Order_Data/
@@ -57,7 +66,7 @@ Thumbs.db
 
 # 日誌文件
 *.log
-*.txt
+*.[tT][xX][tT]
 !README.md
 !requirements.txt
 
@@ -65,4 +74,4 @@ Thumbs.db
 *.tmp
 *.bak
 ~$*
-
+.~lock.*
